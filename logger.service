@@ -1,0 +1,9 @@
+[Unit]
+Description=logger
+Requires=multi-user.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/start_logger.sh

@@ -5,6 +5,7 @@ import bme280
 import os
 import sys
 import time
+import display
 from sensorhub.hub import SensorHub
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 
@@ -18,6 +19,7 @@ db = c.foo
 db.locations.create_index([("geometry", GEOSPHERE)])
 
 hub = SensorHub()
+
 
 gps_socket = gps3.GPSDSocket()
 data_stream = gps3.DataStream()
@@ -38,8 +40,13 @@ for new_data in gps_socket:
             data_stream.TPV["humidity"] = hub.get_humidity()
             data_stream.TPV["brightness"] = hub.get_brightness()
 
+            display.display(hub.get_off_board_temperature(), hub.get_barometer_pressure(), hub.get_humidity(), 'true', data_stream.TPV['alt'])
             location = { "type": "Feature", "geometry": {"type": "Point", "coordinates": [data_stream.TPV["lon"], data_stream.TPV["lat"]]}, "properties": data_stream.TPV }
             print(location)
             db.locations.insert_one(location)
             time.sleep(2)
+        else:
+            display.display(hub.get_off_board_temperature(), hub.get_barometer_pressure(), hub.get_humidity(), 'false', '-')
+            time.sleep(2)
+
 
