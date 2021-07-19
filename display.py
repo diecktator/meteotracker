@@ -28,13 +28,13 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
 # Raspberry Pi pin configuration:
-RST = 24
+RST = 25
 # Note the following are only used with SPI:
-DC = 23
+DC = 24
 SPI_PORT = 0
 SPI_DEVICE = 0
 
-def display(temperature, pressure, humidity, gps, altitude):
+def display(temperature, pressure, altitude):
     # 128x64 display with hardware I2C:
     disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
     
@@ -65,10 +65,8 @@ def display(temperature, pressure, humidity, gps, altitude):
     font = ImageFont.load_default()
     
     # Write two lines of text.
-    draw.text((x, top), 'GPS: ' + gps, font=font, fill=255)
     draw.text((x, top + 20), 'Altitude: ' + str(altitude) + 'm', font=font, fill=255)
-    draw.text((x, top + 30), 'Temperature: ' + str(temperature) + '°C', font=font, fill=255)
-    draw.text((x, top + 40), 'Humidity: ' + str(humidity) + '%', font=font, fill=255)
+    draw.text((x, top + 30), 'Temperature: ' + str(temperature) + 'dC', font=font, fill=255)
     draw.text((x, top + 50), 'Pressure: ' + str(pressure) + 'hPa', font=font, fill=255)
     
     # Display image.
